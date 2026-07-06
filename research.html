@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artifice — Technical Report AR-01</title>
+<meta name="description" content="A report on Artifice: generative user interfaces a local model composes on demand — real sandboxed code or a validated spec — with live demos.">
+<link rel="icon" type="image/svg+xml" href="logo-white.svg">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="research">
+
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+<!-- ======================= NAV ======================= -->
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Artifice — home">
+    <svg class="brand-mark" viewBox="600 596 852 852" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fill="currentColor" d="M 928.863 626.158 L 941.59 626.092 L 1159.89 625.922 L 1225.28 625.879 C 1248.09 625.865 1269.02 624.771 1291.48 629.588 C 1322.44 635.907 1350.89 651.105 1373.36 673.325 C 1424.68 724.668 1420.71 777.592 1420.69 843.179 L 1420.76 943.43 L 1341.06 943.685 L 1341.05 840.179 C 1341.04 821.548 1342.33 787.816 1338.47 771.108 C 1335.11 756.09 1327.73 742.267 1317.13 731.112 C 1301.05 714.212 1277.44 704.141 1254.16 704.331 C 1215.48 704.647 1176.84 704.727 1138.16 704.355 C 1120.75 704.187 1102.21 703.242 1085.28 707.481 C 1068.25 711.852 1052.67 720.601 1040.07 732.858 C 1017.36 754.81 1010.33 781.756 1010.02 812.367 L 1009.88 878.457 C 1009.83 927.159 1008.56 963.222 1046.46 1001.39 C 1062.98 1017.84 1083.85 1029.23 1106.62 1034.23 C 1125.28 1038.28 1144.82 1037.42 1163.89 1037.39 L 1219.21 1037.39 L 1421.01 1037.53 L 1421.03 1116.96 L 1270.43 1116.99 C 1259.54 1116.97 1248.53 1116.73 1237.66 1116.95 C 1203.48 1117.62 1172.05 1111.79 1145.63 1138.38 C 1114.5 1169.72 1119.82 1207.08 1119.89 1247.18 L 1120.07 1343 L 1211.81 1343.08 C 1230.22 1343.09 1262.66 1344.38 1278.94 1340.33 C 1293.66 1336.62 1307.08 1328.96 1317.76 1318.16 C 1346.27 1289.35 1341.37 1253.68 1341.21 1216.08 L 1420.92 1216.14 C 1421.07 1243.23 1422.4 1266.89 1417.49 1293.76 C 1410.9 1324.99 1394.62 1353.89 1372.19 1376.48 C 1319.31 1429.74 1260.36 1422.02 1192.54 1421.97 L 1040.25 1421.97 L 1040.39 1221.6 C 1040.4 1159.25 1050.51 1096.5 1004.58 1047.92 C 962.312 1003.2 912.042 1010.91 856.173 1010.85 C 833.103 1010.83 800.395 1008.53 779.264 1013.63 C 762.893 1017.54 747.864 1025.75 735.736 1037.42 C 717.519 1054.68 707.127 1078.62 706.959 1103.71 C 706.411 1145.92 707.622 1188.31 706.963 1230.55 C 706.735 1245.11 706.039 1263.07 709.221 1277.16 C 712.732 1292.6 720.427 1306.78 731.462 1318.14 C 742.112 1328.91 755.507 1336.54 770.193 1340.23 C 787.47 1344.5 824.078 1343.08 843.49 1343.08 L 948.432 1343.06 C 948.31 1369.08 948.342 1395.09 948.528 1421.1 L 831.146 1421.24 C 809.603 1421.27 769.489 1422.61 750.544 1418.23 C 722.614 1411.92 697.058 1397.79 676.864 1377.49 C 654.183 1354.66 638.498 1325.83 631.656 1294.38 C 626.845 1272.79 627.936 1250.91 627.975 1228.87 L 628.054 1165.89 L 628.015 929.917 L 836.522 930.061 C 864.399 930.087 884.052 927.577 904.857 906.508 C 915.894 895.375 923.433 881.256 926.545 865.891 C 930.166 848.771 928.809 801.342 928.817 781.464 L 928.863 626.158 z"/>
+      <path fill="currentColor" d="M 781.706 626.442 C 800.663 625.775 820.94 626.147 840 626.183 L 840.005 704.181 C 799.933 704.143 759.981 698.368 730.339 728.835 C 700.633 759.367 706.132 792.174 706.317 831.55 L 689.928 831.738 L 628.005 831.627 C 627.874 770.687 625.446 730.288 669.345 678.918 C 697.489 645.984 738.694 628.852 781.706 626.442 z"/>
+      <path fill="currentColor" d="M 860.896 1105.53 C 887.561 1101.74 914.207 1112.56 930.677 1133.87 C 947.148 1155.18 950.905 1183.69 940.518 1208.54 C 930.13 1233.39 907.197 1250.75 880.461 1254 C 839.701 1258.95 802.556 1230.15 797.192 1189.44 C 791.828 1148.74 820.245 1111.3 860.896 1105.53 z"/>
+      <path fill="currentColor" d="M 1164.5 792.727 C 1205.35 786.277 1243.66 814.226 1250 855.089 C 1256.33 895.951 1228.27 934.188 1187.39 940.405 C 1146.68 946.598 1108.63 918.677 1102.32 877.979 C 1096.01 837.281 1123.82 799.152 1164.5 792.727 z"/>
+    </svg>
+    <span class="brand-word">Artifice</span>
+  </a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#abstract" data-nav="abstract">Abstract</a>
+    <a href="#system" data-nav="system">System</a>
+    <a href="#compose" data-nav="compose">Compose</a>
+    <a href="#manipulate" data-nav="manipulate">Manipulate</a>
+    <a href="#vocabulary" data-nav="vocabulary">Vocabulary</a>
+    <a href="#findings" data-nav="findings">Findings</a>
+    <a href="#guide" data-nav="guide">Guide</a>
+    <a href="#references" data-nav="references">References</a>
+  </nav>
+  <span class="mono nav-meta">Technical&nbsp;report&nbsp;—&nbsp;AR-01</span>
+</header>
+
+<main id="top">
+
+<!-- ======================= HERO ======================= -->
+<section class="hero" id="hero">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="mono kicker rv">Technical report · AR-01</p>
+    <h1 class="headline rv" style="--d:.08s">The interface is the output.</h1>
+    <p class="hero-sub rv" style="--d:.2s">
+      A study of generative user interfaces: software a local model composes on demand
+      — as real sandboxed code, or a validated spec — from your data, and dissolves once
+      the task is done. This report explains the system and lets you drive it.
+    </p>
+    <div class="hero-cta rv" style="--d:.32s">
+      <a class="btn btn-solid" href="#abstract">Read the report</a>
+      <a class="btn btn-ghost" href="#manipulate">Skip to the demo</a>
+    </div>
+  </div>
+  <div class="hero-foot mono rv" style="--d:.44s">
+    <span>Local inference</span>
+    <span class="dot-sep" aria-hidden="true"></span>
+    <span>0 cloud endpoints</span>
+    <span class="scroll-hint" aria-hidden="true">scroll ↓</span>
+  </div>
+</section>
+
+<!-- ======================= 01 ABSTRACT ======================= -->
+<section class="sec" id="abstract">
+  <div class="sec-rail"><span class="mono sec-no">01</span><span class="mono sec-name">Abstract</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      Graphical interfaces have been assembled by hand since
+      Sketchpad<a class="cite" href="#ref-1" data-ref="1"><sup>1</sup></a>: a designer
+      anticipates the task, and the user adapts. Artifice inverts the arrangement.
+    </p>
+    <div class="two-col">
+      <p class="body rv" style="--d:.08s">
+        You state an intent. A local model<a class="cite" href="#ref-7" data-ref="7"><sup>7</sup></a>
+        plans the data it needs, fetches it through tools, and then builds an interface
+        that exists only for that task — either by writing real HTML, CSS and JavaScript
+        into a hard-sandboxed canvas, or by emitting a constrained spec a vetted runtime
+        renders. Not a fixed feature UI. Not a chat transcript.
+      </p>
+      <p class="body rv" style="--d:.16s">
+        The result behaves like what Victor called information
+        software<a class="cite" href="#ref-3" data-ref="3"><sup>3</sup></a>: a view built
+        for a question, discarded once it is answered. Surfaces appear, do their work,
+        and <em>dissolve</em>. What is worth keeping is pinned; everything else was never
+        meant to persist.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 02 SYSTEM ======================= -->
+<section class="sec" id="system">
+  <div class="sec-rail"><span class="mono sec-no">02</span><span class="mono sec-name">System</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      Every surface is produced by a two-phase loop. The model never sees raw data —
+      only manifests: field names, row counts, a short sample.
+    </p>
+    <div class="pipeline rv" style="--d:.12s" id="pipeline">
+      <div class="pipe-track" aria-hidden="true"><span class="pipe-dot" id="pipeDot"></span></div>
+      <ol class="pipe-stages">
+        <li class="stage" data-stage="0"><button type="button" class="stage-btn"><span class="stage-no">S0</span><span class="stage-name">Intent</span></button></li>
+        <li class="stage" data-stage="1"><button type="button" class="stage-btn"><span class="stage-no">S1</span><span class="stage-name">Plan + fetch</span></button></li>
+        <li class="stage" data-stage="2"><button type="button" class="stage-btn"><span class="stage-no">S2</span><span class="stage-name">Surface</span></button></li>
+        <li class="stage" data-stage="3"><button type="button" class="stage-btn"><span class="stage-no">S3</span><span class="stage-name">Interact</span></button></li>
+        <li class="stage" data-stage="4"><button type="button" class="stage-btn"><span class="stage-no">S4</span><span class="stage-name">Evolve</span></button></li>
+      </ol>
+      <div class="stage-detail" id="stageDetail">
+        <p class="mono stage-detail-label" id="stageDetailLabel"></p>
+        <p class="stage-detail-text" id="stageDetailText"></p>
+      </div>
+    </div>
+    <div class="engines rv" style="--d:.18s">
+      <div class="engine">
+        <p class="mono engine-tag">Engine A · default</p>
+        <h3 class="engine-name">Generative</h3>
+        <p class="engine-body">
+          The model <em>designs</em> the surface as real HTML, CSS and JavaScript and
+          streams it into a canvas sealed with <code>sandbox="allow-scripts"</code>, an
+          opaque origin, and a no-network policy. A baked design system is the floor, so
+          every surface looks intentional; the model layers its own layout and logic on
+          top. Real data arrives as <code>window.DATA</code> — only from tools that ran.
+        </p>
+      </div>
+      <div class="engine">
+        <p class="mono engine-tag">Engine B · constrained</p>
+        <h3 class="engine-name">Structured</h3>
+        <p class="engine-body">
+          Or the model emits a constrained JSON spec over 41 vetted components. A schema
+          validates it, a no-fabrication pass rejects invented data, and a reactive
+          renderer draws it. Filtering and re-ranking run as deterministic client-side
+          transforms — zero model round-trips. The rest of this report studies this path.
+        </p>
+      </div>
+    </div>
+    <p class="body rv" style="--d:.24s">
+      Tools are the only source of truth — four built in, and any number over the Model
+      Context Protocol<a class="cite" href="#ref-6" data-ref="6"><sup>6</sup></a>, spoken
+      as JSON-RPC 2.0 from a Rust backend<a class="cite" href="#ref-9" data-ref="9"><sup>9</sup></a>,
+      with secrets held in the system keychain.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= 03 COMPOSE · FIG 1 ======================= -->
+<section class="sec" id="compose">
+  <div class="sec-rail"><span class="mono sec-no">03</span><span class="mono sec-name">Fig. 1</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      On the structured path, the model does not draw the interface. It <em>dictates</em>
+      one — a spec streamed token by token that a vetted renderer assembles in real time.
+    </p>
+    <div class="fig rv" style="--d:.12s">
+      <div class="fig-toolbar">
+        <div class="fig-tabs" aria-label="Example specifications">
+          <button class="tab is-active" aria-pressed="true" data-example="0">plan comparison</button>
+          <button class="tab" aria-pressed="false" data-example="1">regex tester</button>
+          <button class="tab" aria-pressed="false" data-example="2">palette picker</button>
+        </div>
+        <button class="replay" id="replayBtn" aria-label="Replay specification stream">↺ replay</button>
+      </div>
+      <div class="fig-panes">
+        <div class="pane pane-spec">
+          <p class="mono pane-label">surface specification — streamed</p>
+          <pre id="specStream" aria-label="Streaming specification"><code></code></pre>
+        </div>
+        <div class="pane pane-render">
+          <p class="mono pane-label">vetted render</p>
+          <div class="wf-window">
+            <div class="wf-chrome" aria-hidden="true">
+              <span class="wf-light"></span><span class="wf-light"></span><span class="wf-light"></span>
+              <span class="mono wf-title" id="wfTitle"></span>
+            </div>
+            <div class="wf-stage" id="wfStage"></div>
+          </div>
+        </div>
+      </div>
+      <p class="mono fig-caption">
+        Fig. 1 — A surface specification and the wireframe assembled from it. Unclosed
+        nodes render as Skeletons until their JSON completes.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 04 MANIPULATE · FIG 2 ======================= -->
+<section class="sec" id="manipulate">
+  <div class="sec-rail"><span class="mono sec-no">04</span><span class="mono sec-name">Fig. 2</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      Once a surface exists, manipulation stays local. Move a weight and the ranking
+      recomputes on your machine — no round-trip to the model.
+    </p>
+    <div class="demo rv" style="--d:.12s" id="rankDemo">
+      <div class="demo-controls">
+        <div class="demo-slider">
+          <div class="demo-slider-top"><span>Premium</span><span data-out="premium">0.60</span></div>
+          <input class="demo-range" type="range" min="0" max="1" step="0.01" value="0.6" data-weight="premium" aria-label="Premium weight">
+          <p class="demo-slider-note">lower is better</p>
+        </div>
+        <div class="demo-slider">
+          <div class="demo-slider-top"><span>Deductible</span><span data-out="deductible">0.30</span></div>
+          <input class="demo-range" type="range" min="0" max="1" step="0.01" value="0.3" data-weight="deductible" aria-label="Deductible weight">
+          <p class="demo-slider-note">lower is better</p>
+        </div>
+        <div class="demo-slider">
+          <div class="demo-slider-top"><span>Coverage</span><span data-out="coverage">0.80</span></div>
+          <input class="demo-range" type="range" min="0" max="1" step="0.01" value="0.8" data-weight="coverage" aria-label="Coverage weight">
+          <p class="demo-slider-note">higher is better</p>
+        </div>
+      </div>
+      <div class="demo-table" id="rankTable">
+        <div class="demo-row demo-head" aria-hidden="true">
+          <span class="demo-rank">#</span>
+          <span>Plan</span>
+          <span class="demo-num">Premium</span>
+          <span class="demo-num">Deductible</span>
+          <span class="demo-num">Coverage</span>
+          <span>Score</span>
+        </div>
+        <div id="rankRows"></div>
+      </div>
+      <p class="demo-meta"><span id="rankMeta"></span></p>
+    </div>
+    <p class="mono fig-caption">
+      Fig. 2 — The <em>computeScore</em> transform, live: each column normalized,
+      weighted, and summed; rows re-sort on every input.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= 05 VOCABULARY · FIG 3 ======================= -->
+<section class="sec" id="vocabulary">
+  <div class="sec-rail"><span class="mono sec-no">05</span><span class="mono sec-name">Fig. 3</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      On the structured path the model cannot invent components. Every node must name one
+      of 41 vetted types; anything else is repaired to a Skeleton and flagged.
+    </p>
+    <div class="vocab rv" style="--d:.12s" id="vocab">
+      <div class="vocab-legend" id="vocabLegend"></div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+      <p class="mono fig-caption">
+        Fig. 3 — The complete component vocabulary, small enough to audit exhaustively.
+        Select a category to isolate it.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 06 FINDINGS ======================= -->
+<section class="sec" id="findings">
+  <div class="sec-rail"><span class="mono sec-no">06</span><span class="mono sec-name">Findings</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      Constraint is what makes local inference viable — the grammar does for interfaces
+      what guided decoding does for text.
+    </p>
+    <div class="stats rv" style="--d:.12s">
+      <div class="stat"><span class="stat-n" data-count="2">0</span><span class="stat-l">surface engines</span></div>
+      <div class="stat"><span class="stat-n" data-count="41">0</span><span class="stat-l">vetted components</span></div>
+      <div class="stat"><span class="stat-n" data-count="7">0</span><span class="stat-l">whitelisted transforms</span></div>
+      <div class="stat"><span class="stat-n" data-count="0">0</span><span class="stat-l">cloud endpoints</span></div>
+      <div class="stat"><span class="stat-n" data-count="8192">0</span><span class="stat-l">token context window</span></div>
+      <div class="stat"><span class="stat-n" data-count="0.92" data-decimals="2">0</span><span class="stat-l">semantic-cache threshold</span></div>
+    </div>
+    <ol class="guarantees rv" style="--d:.18s">
+      <li><span class="g-no">G1</span><div><strong>No fabrication.</strong> A spec binding to data no tool produced is rejected — one repair round, then failure.</div></li>
+      <li><span class="g-no">G2</span><div><strong>Sealed generation.</strong> Generative surfaces run in a sandbox with an opaque origin and no network — the model's code cannot phone home.</div></li>
+      <li><span class="g-no">G3</span><div><strong>Consent for effects.</strong> Any tool that writes to the world requires an explicit confirmation before it fires.</div></li>
+      <li><span class="g-no">G4</span><div><strong>Provenance everywhere.</strong> Every dataset carries the tool that produced it and a timestamp, shown on inspect.</div></li>
+      <li><span class="g-no">G5</span><div><strong>Nothing hidden.</strong> The raw spec, state and datasets behind any surface are one keystroke away.</div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= 07 GUIDE ======================= -->
+<section class="sec" id="guide">
+  <div class="sec-rail"><span class="mono sec-no">07</span><span class="mono sec-name">Guide</span></div>
+  <div class="sec-body">
+    <p class="lede rv">
+      Artifice runs entirely on your machine. Point it at a local model, describe a task,
+      and manipulate what comes back.
+    </p>
+    <ol class="steps rv" style="--d:.12s">
+      <li><span class="step-no">01</span><div><strong>Start a local model.</strong> Install Ollama<a class="cite" href="#ref-8" data-ref="8"><sup>8</sup></a> and pull the defaults — the <em>qwen3:4b</em> and <em>nomic-embed-text</em> models. Nothing leaves your machine.</div></li>
+      <li><span class="step-no">02</span><div><strong>Summon it.</strong> Press <kbd>⌘K</kbd> and one command field appears: <em>what are you doing?</em> — not which feature you want.</div></li>
+      <li><span class="step-no">03</span><div><strong>Describe the task.</strong> One sentence. Press return; the surface streams in, composed for exactly that.</div></li>
+      <li><span class="step-no">04</span><div><strong>Refine in place.</strong> Type in the <em>Refine this…</em> field and the model patches the live surface instead of rebuilding it.</div></li>
+      <li><span class="step-no">05</span><div><strong>Pin or let it dissolve.</strong> Pin the surfaces worth keeping; they open in their own window. Everything else disappears.</div></li>
+      <li><span class="step-no">06</span><div><strong>Inspect anything.</strong> <kbd>⌘I</kbd> flips a surface over: raw spec, state, datasets, and a provenance chip on every value.</div></li>
+      <li><span class="step-no">07</span><div><strong>Connect your own tools.</strong> Add MCP<a class="cite" href="#ref-6" data-ref="6"><sup>6</sup></a> servers in settings; the model's reach is the union of what they expose.</div></li>
+      <li class="keys" aria-label="Keyboard shortcuts">
+        <span class="key"><kbd>⌘K</kbd><span>Summon</span></span>
+        <span class="key"><kbd>Esc</kbd><span>Dismiss</span></span>
+        <span class="key"><kbd>⌘I</kbd><span>Inspect</span></span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= 08 IRON LAWS ======================= -->
+<section class="sec" id="laws">
+  <div class="sec-rail"><span class="mono sec-no">08</span><span class="mono sec-name">Iron laws</span></div>
+  <div class="sec-body">
+    <p class="body rv">
+      A wrong number in an authoritative-looking dashboard is worse than a wrong
+      sentence. Three principles hold the project together:
+    </p>
+    <div class="laws">
+      <p class="law rv" style="--d:.1s"><span class="law-no">I</span> The interface is inferred, not designed.</p>
+      <p class="law rv" style="--d:.2s"><span class="law-no">II</span> Data comes only from tools.</p>
+      <p class="law rv" style="--d:.3s"><span class="law-no">III</span> Every surface dissolves. What matters is pinned.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 09 REFERENCES ======================= -->
+<section class="sec" id="references">
+  <div class="sec-rail"><span class="mono sec-no">09</span><span class="mono sec-name">References</span></div>
+  <div class="sec-body">
+    <ol class="refs rv">
+      <li id="ref-1" data-refid="1"><span class="ref-no">1</span><div>Sutherland, I.&nbsp;E. <em>Sketchpad.</em> AFIPS Spring Joint Computer Conference, 1963.</div></li>
+      <li id="ref-2" data-refid="2"><span class="ref-no">2</span><div>Hutchins, Hollan &amp; Norman. <em>Direct Manipulation Interfaces.</em> Human–Computer Interaction 1(4), 1985.</div></li>
+      <li id="ref-3" data-refid="3"><span class="ref-no">3</span><div>Victor, B. <em>Magic Ink: Information Software and the Graphical Interface.</em> 2006.</div></li>
+      <li id="ref-4" data-refid="4"><span class="ref-no">4</span><div>Vaswani, A., et&nbsp;al. <em>Attention Is All You Need.</em> NeurIPS 30, 2017.</div></li>
+      <li id="ref-5" data-refid="5"><span class="ref-no">5</span><div>Willard &amp; Louf. <em>Efficient Guided Generation for LLMs.</em> arXiv:2307.09702, 2023.</div></li>
+      <li id="ref-6" data-refid="6"><span class="ref-no">6</span><div>Anthropic. <em>Introducing the Model Context Protocol.</em> 2024.</div></li>
+      <li id="ref-7" data-refid="7"><span class="ref-no">7</span><div>Qwen Team. <em>Qwen3 Technical Report.</em> arXiv:2505.09388, 2025.</div></li>
+      <li id="ref-8" data-refid="8"><span class="ref-no">8</span><div>Ollama. <em>Run large language models locally.</em> ollama.com, 2023–.</div></li>
+      <li id="ref-9" data-refid="9"><span class="ref-no">9</span><div>Tauri Working Group. <em>Tauri 2.0.</em> tauri.app, 2024.</div></li>
+      <li id="ref-10" data-refid="10"><span class="ref-no">10</span><div>Nielsen, J. <em>Ten Usability Heuristics.</em> Nielsen Norman Group, 1994.</div></li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="footer">
+  <svg class="footer-mark" viewBox="600 596 852 852" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path fill="currentColor" d="M 928.863 626.158 L 941.59 626.092 L 1159.89 625.922 L 1225.28 625.879 C 1248.09 625.865 1269.02 624.771 1291.48 629.588 C 1322.44 635.907 1350.89 651.105 1373.36 673.325 C 1424.68 724.668 1420.71 777.592 1420.69 843.179 L 1420.76 943.43 L 1341.06 943.685 L 1341.05 840.179 C 1341.04 821.548 1342.33 787.816 1338.47 771.108 C 1335.11 756.09 1327.73 742.267 1317.13 731.112 C 1301.05 714.212 1277.44 704.141 1254.16 704.331 C 1215.48 704.647 1176.84 704.727 1138.16 704.355 C 1120.75 704.187 1102.21 703.242 1085.28 707.481 C 1068.25 711.852 1052.67 720.601 1040.07 732.858 C 1017.36 754.81 1010.33 781.756 1010.02 812.367 L 1009.88 878.457 C 1009.83 927.159 1008.56 963.222 1046.46 1001.39 C 1062.98 1017.84 1083.85 1029.23 1106.62 1034.23 C 1125.28 1038.28 1144.82 1037.42 1163.89 1037.39 L 1219.21 1037.39 L 1421.01 1037.53 L 1421.03 1116.96 L 1270.43 1116.99 C 1259.54 1116.97 1248.53 1116.73 1237.66 1116.95 C 1203.48 1117.62 1172.05 1111.79 1145.63 1138.38 C 1114.5 1169.72 1119.82 1207.08 1119.89 1247.18 L 1120.07 1343 L 1211.81 1343.08 C 1230.22 1343.09 1262.66 1344.38 1278.94 1340.33 C 1293.66 1336.62 1307.08 1328.96 1317.76 1318.16 C 1346.27 1289.35 1341.37 1253.68 1341.21 1216.08 L 1420.92 1216.14 C 1421.07 1243.23 1422.4 1266.89 1417.49 1293.76 C 1410.9 1324.99 1394.62 1353.89 1372.19 1376.48 C 1319.31 1429.74 1260.36 1422.02 1192.54 1421.97 L 1040.25 1421.97 L 1040.39 1221.6 C 1040.4 1159.25 1050.51 1096.5 1004.58 1047.92 C 962.312 1003.2 912.042 1010.91 856.173 1010.85 C 833.103 1010.83 800.395 1008.53 779.264 1013.63 C 762.893 1017.54 747.864 1025.75 735.736 1037.42 C 717.519 1054.68 707.127 1078.62 706.959 1103.71 C 706.411 1145.92 707.622 1188.31 706.963 1230.55 C 706.735 1245.11 706.039 1263.07 709.221 1277.16 C 712.732 1292.6 720.427 1306.78 731.462 1318.14 C 742.112 1328.91 755.507 1336.54 770.193 1340.23 C 787.47 1344.5 824.078 1343.08 843.49 1343.08 L 948.432 1343.06 C 948.31 1369.08 948.342 1395.09 948.528 1421.1 L 831.146 1421.24 C 809.603 1421.27 769.489 1422.61 750.544 1418.23 C 722.614 1411.92 697.058 1397.79 676.864 1377.49 C 654.183 1354.66 638.498 1325.83 631.656 1294.38 C 626.845 1272.79 627.936 1250.91 627.975 1228.87 L 628.054 1165.89 L 628.015 929.917 L 836.522 930.061 C 864.399 930.087 884.052 927.577 904.857 906.508 C 915.894 895.375 923.433 881.256 926.545 865.891 C 930.166 848.771 928.809 801.342 928.817 781.464 L 928.863 626.158 z"/>
+    <path fill="currentColor" d="M 781.706 626.442 C 800.663 625.775 820.94 626.147 840 626.183 L 840.005 704.181 C 799.933 704.143 759.981 698.368 730.339 728.835 C 700.633 759.367 706.132 792.174 706.317 831.55 L 689.928 831.738 L 628.005 831.627 C 627.874 770.687 625.446 730.288 669.345 678.918 C 697.489 645.984 738.694 628.852 781.706 626.442 z"/>
+    <path fill="currentColor" d="M 860.896 1105.53 C 887.561 1101.74 914.207 1112.56 930.677 1133.87 C 947.148 1155.18 950.905 1183.69 940.518 1208.54 C 930.13 1233.39 907.197 1250.75 880.461 1254 C 839.701 1258.95 802.556 1230.15 797.192 1189.44 C 791.828 1148.74 820.245 1111.3 860.896 1105.53 z"/>
+    <path fill="currentColor" d="M 1164.5 792.727 C 1205.35 786.277 1243.66 814.226 1250 855.089 C 1256.33 895.951 1228.27 934.188 1187.39 940.405 C 1146.68 946.598 1108.63 918.677 1102.32 877.979 C 1096.01 837.281 1123.82 799.152 1164.5 792.727 z"/>
+  </svg>
+  <div class="footer-rows">
+    <div class="footer-row">
+      <span class="mono"><a href="index.html">Artifice</a></span>
+      <span class="mono">Built by <a href="https://arjunkalbag.xyz" target="_blank" rel="noopener">Arjun Kalbag</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="cite-tip" id="citeTip" role="tooltip" aria-hidden="true"></div>
+<div class="toast" id="toast" aria-hidden="true">That shortcut belongs to the app.</div>
+
+<script src="app.js"></script>
+</body>
+</html>
